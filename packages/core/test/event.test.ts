@@ -1,15 +1,15 @@
 import { describe, expect } from "bun:test"
 import { Effect, Fiber, Layer, Schema, Stream } from "effect"
 import { Event } from "@opencode-ai/core/event"
-import { Instance } from "@opencode-ai/core/instance"
+import { Location } from "@opencode-ai/core/location"
 import { testEffect } from "./lib/effect"
 
-const instanceLayer = Layer.succeed(
-  Instance.Service,
-  Instance.Service.of({ directory: "project", workspaceID: "workspace" }),
+const locationLayer = Layer.succeed(
+  Location.Service,
+  Location.Service.of({ directory: "project", workspaceID: "workspace" }),
 )
-const it = testEffect(Event.layer.pipe(Layer.provideMerge(instanceLayer)))
-const itWithoutInstance = testEffect(Event.layer)
+const it = testEffect(Event.layer.pipe(Layer.provideMerge(locationLayer)))
+const itWithoutLocation = testEffect(Event.layer)
 
 const Message = Event.define({
   type: "test.message",
@@ -34,7 +34,7 @@ const VersionedMessage = Event.define({
 })
 
 describe("Event", () => {
-  it.effect("publishes events with the current instance", () =>
+  it.effect("publishes events with the current location", () =>
     Effect.gen(function* () {
       const events = yield* Event.Service
       const fiber = yield* events.subscribe(Message).pipe(Stream.take(1), Stream.runCollect, Effect.forkScoped)
@@ -46,16 +46,16 @@ describe("Event", () => {
       expect(event.type).toBe("test.message")
       expect(event).not.toHaveProperty("version")
       expect(event.data).toEqual({ text: "hello" })
-      expect(event.instance).toEqual({ directory: "project", workspaceID: "workspace" })
+      expect(event.location).toEqual({ directory: "project", workspaceID: "workspace" })
     }),
   )
 
-  itWithoutInstance.effect("omits instance when no instance is available", () =>
+  itWithoutLocation.effect("omits location when no location is available", () =>
     Effect.gen(function* () {
       const events = yield* Event.Service
       const event = yield* events.publish(GlobalMessage, { text: "hello" })
 
-      expect(event).not.toHaveProperty("instance")
+      expect(event).not.toHaveProperty("location")
       expect(event.type).toBe("test.global")
     }),
   )

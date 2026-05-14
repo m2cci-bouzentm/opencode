@@ -11,8 +11,8 @@ import { Effect, Layer, Stream } from "effect"
 
 function emitNormal(event: Event.Payload) {
   GlobalBus.emit("event", {
-    directory: event.instance?.directory,
-    workspace: event.instance?.workspaceID,
+    directory: event.location?.directory,
+    workspace: event.location?.workspaceID,
     payload: {
       id: event.id,
       type: event.type,
@@ -48,8 +48,8 @@ const republish = (bus: ProjectBus.Interface) => (event: Event.Payload) => {
     yield* publishNormal
     yield* Effect.sync(() => {
       GlobalBus.emit("event", {
-        directory: event.instance?.directory,
-        workspace: event.instance?.workspaceID,
+        directory: event.location?.directory,
+        workspace: event.location?.workspaceID,
         payload: {
           type: "sync",
           name: `${definition.type}.${definition.version}`,

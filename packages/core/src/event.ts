@@ -1,5 +1,5 @@
 import { Context, Effect, Layer, Option, PubSub, Schema, Stream } from "effect"
-import { Instance } from "./instance"
+import { Location } from "./location"
 import { withStatics } from "./schema"
 import { Identifier } from "./util/identifier"
 
@@ -9,11 +9,11 @@ export const ID = Schema.String.pipe(
 )
 export type ID = typeof ID.Type
 
-export const InstanceRef = Schema.Struct({
+export const LocationRef = Schema.Struct({
   directory: Schema.String,
   workspaceID: Schema.optional(Schema.String),
-}).annotate({ identifier: "Event.Instance" })
-export type InstanceRef = Instance.Ref
+}).annotate({ identifier: "Event.Location" })
+export type LocationRef = Location.Ref
 
 export type Definition<
   Type extends string = string,
@@ -24,7 +24,7 @@ export type Definition<
   readonly metadata?: Record<string, unknown>
   readonly type: Type
   readonly version?: number
-  readonly instance?: InstanceRef
+  readonly location?: LocationRef
   readonly data: Data
 }> & {
   readonly type: Type
@@ -77,7 +77,7 @@ export function define<const Type extends string, Fields extends Schema.Struct.F
     metadata: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
     type: Schema.Literal(input.type),
     version: Schema.optional(Schema.Number),
-    instance: Schema.optional(InstanceRef),
+    location: Schema.optional(LocationRef),
     data: Data,
   }).annotate({ identifier: input.type })
 
@@ -169,13 +169,13 @@ export const layer = Layer.effect(
       options?: PublishOptions<D>,
     ) {
       return Effect.gen(function* () {
-        const instance = Option.getOrUndefined(yield* Effect.serviceOption(Instance.Service))
+        const location = Option.getOrUndefined(yield* Effect.serviceOption(Location.Service))
         const event = {
           id: options?.id ?? ID.create(),
           ...(options?.metadata ? { metadata: options.metadata } : {}),
           type: definition.type,
           ...(definition.version === undefined ? {} : { version: definition.version }),
-          ...(instance ? { instance } : {}),
+          ...(location ? { location } : {}),
           data,
         } as Payload<D>
         return yield* publishEvent(event)

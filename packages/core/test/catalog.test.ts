@@ -2,18 +2,18 @@ import { describe, expect } from "bun:test"
 import { DateTime, Effect, Fiber, Layer, Option, Stream } from "effect"
 import { Catalog } from "@opencode-ai/core/catalog"
 import { Event } from "@opencode-ai/core/event"
-import { Instance } from "@opencode-ai/core/instance"
+import { Location } from "@opencode-ai/core/location"
 import { ModelV2 } from "@opencode-ai/core/model"
 import { PluginV2 } from "@opencode-ai/core/plugin"
 import { ProviderV2 } from "@opencode-ai/core/provider"
 import { testEffect } from "./lib/effect"
 
-const instanceLayer = Layer.succeed(Instance.Service, Instance.Service.of({ directory: "test" }))
+const locationLayer = Layer.succeed(Location.Service, Location.Service.of({ directory: "test" }))
 const it = testEffect(
   Catalog.layer.pipe(
     Layer.provideMerge(Event.defaultLayer),
     Layer.provideMerge(PluginV2.defaultLayer),
-    Layer.provideMerge(instanceLayer),
+    Layer.provideMerge(locationLayer),
   ),
 )
 
@@ -97,7 +97,7 @@ describe("CatalogV2", () => {
       expect(event?.data.model.providerID).toBe(providerID)
       expect(event?.data.model.id).toBe(modelID)
       expect(event?.data.model.name).toBe("Updated Model")
-      expect(event?.instance).toEqual({ directory: "test" })
+      expect(event?.location).toEqual({ directory: "test" })
     }),
   )
 

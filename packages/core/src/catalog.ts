@@ -5,7 +5,7 @@ import { produce, type Draft } from "immer"
 import { ModelV2 } from "./model"
 import { PluginV2 } from "./plugin"
 import { ProviderV2 } from "./provider"
-import { Instance } from "./instance"
+import { Location } from "./location"
 import { EventV2 } from "./event"
 
 type ProviderRecord = {
@@ -67,7 +67,7 @@ export class Service extends Context.Service<Service, Interface>()("@opencode/v2
 export const layer = Layer.effect(
   Service,
   Effect.gen(function* () {
-    yield* Instance.Service
+    yield* Location.Service
     let records = HashMap.empty<ProviderV2.ID, ProviderRecord>()
     let defaultModel: { providerID: ProviderV2.ID; modelID: ModelV2.ID } | undefined
     const plugin = yield* PluginV2.Service
