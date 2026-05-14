@@ -5,8 +5,8 @@
 // session.next events are the primary session storage model.
 import { and, desc, eq } from "@/storage/db"
 import type { Database } from "@/storage/db"
-import { SessionMessage } from "@/v2/session-message"
-import { SessionMessageUpdater } from "@/v2/session-message-updater"
+import { SessionMessage } from "@opencode-ai/core/session-message"
+import { SessionMessageUpdater } from "@opencode-ai/core/session-message-updater"
 import { EventV2 } from "@opencode-ai/core/event"
 import { SessionEvent } from "@opencode-ai/core/session-event"
 import * as DateTime from "effect/DateTime"

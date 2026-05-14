@@ -5,7 +5,7 @@ import { EventV2 } from "@opencode-ai/core/event"
 import { ModelV2 } from "@opencode-ai/core/model"
 import { ProviderV2 } from "@opencode-ai/core/provider"
 import { SessionEvent } from "@opencode-ai/core/session-event"
-import { SessionMessageUpdater } from "../../src/v2/session-message-updater"
+import { SessionMessageUpdater } from "@opencode-ai/core/session-message-updater"
 
 test("step snapshots carry over to assistant messages", () => {
   const state: SessionMessageUpdater.MemoryState = { messages: [] }
