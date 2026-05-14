@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import * as DateTime from "effect/DateTime"
 import { SessionID } from "../../src/session/schema"
-import { EventV2 } from "../../src/v2/event"
+import { EventV2 } from "@opencode-ai/core/event"
 import { ModelV2 } from "@opencode-ai/core/model"
 import { ProviderV2 } from "@opencode-ai/core/provider"
 import { SessionEvent } from "@opencode-ai/core/session-event"

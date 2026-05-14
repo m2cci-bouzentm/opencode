@@ -6,7 +6,6 @@ import * as Database from "@/storage/db"
 import { Context, DateTime, Effect, Layer, Option, Schema } from "effect"
 import { SessionMessage } from "./session-message"
 import type { Prompt } from "@opencode-ai/core/session-prompt"
-import { EventV2 as LegacyEventV2 } from "./event"
 import { ProjectID } from "@/project/schema"
 import { SessionEvent } from "@opencode-ai/core/session-event"
 import { V2Schema } from "@opencode-ai/core/v2-schema"
@@ -100,15 +99,15 @@ export interface Interface {
   }) => Effect.Effect<SessionMessage.Message[], never>
   readonly context: (sessionID: SessionID) => Effect.Effect<SessionMessage.Message[], never>
   readonly prompt: (input: {
-    id?: LegacyEventV2.ID
+    id?: EventV2.ID
     sessionID: SessionID
     prompt: Prompt
     delivery?: Delivery
   }) => Effect.Effect<SessionMessage.User, never>
-  readonly shell: (input: { id?: LegacyEventV2.ID; sessionID: SessionID; command: string }) => Effect.Effect<void, never>
-  readonly skill: (input: { id?: LegacyEventV2.ID; sessionID: SessionID; skill: string }) => Effect.Effect<void, never>
+  readonly shell: (input: { id?: EventV2.ID; sessionID: SessionID; command: string }) => Effect.Effect<void, never>
+  readonly skill: (input: { id?: EventV2.ID; sessionID: SessionID; skill: string }) => Effect.Effect<void, never>
   readonly subagent: (input: {
-    id?: LegacyEventV2.ID
+    id?: EventV2.ID
     parentID: SessionID
     prompt: Prompt
     agent: string

@@ -1,7 +1,7 @@
 import { Schema } from "effect"
 import { Prompt } from "@opencode-ai/core/session-prompt"
 import { SessionEvent } from "@opencode-ai/core/session-event"
-import { EventV2 } from "./event"
+import { EventV2 } from "@opencode-ai/core/event"
 import { ToolOutput } from "@opencode-ai/core/tool-output"
 import { V2Schema } from "@opencode-ai/core/v2-schema"
 import { ModelV2 } from "@opencode-ai/core/model"
